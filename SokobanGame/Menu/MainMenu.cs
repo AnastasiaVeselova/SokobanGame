@@ -20,7 +20,7 @@ namespace SokobanGame
 
         public MainMenu(ContentManager content, GraphicsDeviceManager graphics)
         {
-            Textures = TextureContent.LoadListContent<Texture2D>(content, "MainMenu");
+            Textures = LoadContent.LoadListContent<Texture2D>(content, "MainMenu");
 
             this.graphics = graphics;
 

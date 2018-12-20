@@ -88,13 +88,13 @@ namespace SokobanGame
             if (KeyboardState.IsKeyDown(Keys.Down))
                 return "characterDown";
 
-            if (KeyboardState.IsKeyDown(Keys.Right))
+            else if (KeyboardState.IsKeyDown(Keys.Right))
                 return "characterRight";
 
-            if (KeyboardState.IsKeyDown(Keys.Left))
+            else if (KeyboardState.IsKeyDown(Keys.Left))
                 return "characterLeft";
 
-            return "characterUp";
+            else return "characterUp";
         }
 
         private IntegerCoordinates GetNextCoords(SokoGame game, IntegerCoordinates coords)

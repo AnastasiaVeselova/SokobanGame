@@ -22,8 +22,7 @@ namespace SokobanGame
                 var baseDir = "SokobanGame";
                 directoryPath = Path.Combine(curDir.Substring(0, curDir.LastIndexOf(baseDir)+ baseDir.Length), "Maps");
             }
-                
-
+               
 
             return Directory.EnumerateFiles(directoryPath, searchPattern)
                       .Select(File.ReadAllText).ToList();

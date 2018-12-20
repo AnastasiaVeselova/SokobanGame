@@ -12,6 +12,7 @@ namespace SokobanGame
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SokoGame sokoGame;
+        private FinishGame finishGame;
 
         private KeyboardState currentKeyboardState;
         private KeyboardState previousKeyboardState;
@@ -19,14 +20,14 @@ namespace SokobanGame
         private const float TIMER = 0.1f;
         private float timer = TIMER;
 
-        public static GameState State {get;set; }
+        public static GameState State { get; set; }
 
         private MainMenu mainMenu;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            
+
             graphics.PreferredBackBufferHeight = 500;
             graphics.PreferredBackBufferWidth = 500;
             IsMouseVisible = true;
@@ -46,6 +47,7 @@ namespace SokobanGame
 
             mainMenu = new MainMenu(Content, graphics);
             sokoGame = new SokoGame(Content, graphics);
+            finishGame = new FinishGame(Content, graphics);
 
             Mouse.WindowHandle = Window.Handle;
             base.Initialize();
@@ -91,29 +93,32 @@ namespace SokobanGame
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (timer < 0)
+            switch (State)
             {
-                switch (State)
-                {
-                    case GameState.Menu:
-                        {
-                            mainMenu.Update();
-                            break;
-                        }
+                case GameState.Menu:
+                    mainMenu.Update();
+                    break;
 
-                    case GameState.Game:
+                case GameState.Finish:
+                    finishGame.Update(sokoGame.CurrentScores);
+                    break;
+
+                case GameState.Game:
+                    {
+
+                        if (timer < 0)
                         {
                             var pressedKeys = currentKeyboardState.GetPressedKeys();
 
                             if (pressedKeys.Length == 1)
-                            {
                                 sokoGame.Update(currentKeyboardState);
-                            }
-                            break;
+
+
+                            timer = TIMER;
+                            base.Update(gameTime);
                         }
-                }
-                timer = TIMER;
-                base.Update(gameTime);
+                        break;
+                    }
             }
 
         }
@@ -144,10 +149,18 @@ namespace SokobanGame
                 case GameState.Game:
                     {
                         sokoGame.Draw(spriteBatch);
+                        if (sokoGame.FinishGame)
+                            State = GameState.Finish;
+                        break;
+                    }
+
+                case GameState.Finish:
+                    {
+                        finishGame.Draw(spriteBatch);
                         break;
                     }
             }
-            
+
 
             spriteBatch.End();
 

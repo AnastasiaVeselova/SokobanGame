@@ -20,9 +20,6 @@ namespace SokobanGame
 
         private List<List<Creature>[,]> Maps;
 
-        //private int mapHeight;
-        //private int mapWidth;
-
         public int GetMapHeight() => Map.GetLength(1);
         public int GetMapWidth() => Map.GetLength(0);
 
@@ -32,6 +29,9 @@ namespace SokobanGame
 
         public int Scores { get; set; }
         public int CurrentScores { get; set; }
+
+        public bool FinishGame { get; set; }
+
         public bool IsFinishedLevel() => StorageLocationCount == 0;
 
         private int widthLoc;
@@ -40,10 +40,6 @@ namespace SokobanGame
         private int textureSize;
 
         private int levelNumber;
-
-
-
-        // private SpriteFont font;
 
         private GraphicsDeviceManager graphics;
 
@@ -54,13 +50,13 @@ namespace SokobanGame
 
             mapCreator = new CreatureMapCreator();
 
-            Textures = TextureContent.LoadListContent<Texture2D>(content, "Graphics");
+            Textures = LoadContent.LoadListContent<Texture2D>(content, "Graphics");
 
-            Fonts = TextureContent.LoadListContent<SpriteFont>(content, "Font");
+            Fonts = LoadContent.LoadListContent<SpriteFont>(content, "Font");
 
-            var mapsStr = LoadFiles.LoadFilesFromDirectory();
+            var mapsStrList = LoadFiles.LoadFilesFromDirectory();
 
-            Maps = mapCreator.CreateMap(mapsStr);
+            Maps = mapCreator.CreateMap(mapsStrList);
 
             Scores = 0;
             levelNumber = 0;
@@ -68,16 +64,15 @@ namespace SokobanGame
         }
 
 
-        private void SetNextMap(int k)
+        private bool SetNextMap(int k)
         {
             if (k >= Maps.Count)
-                return;
+                return false;
 
-        Map = Maps[k];
+            Map = Maps[k];
             StorageLocationCount = 0;
             CurrentScores = 0;
 
-            //IsOver = false;
 
             for (int i = 0; i < GetMapHeight(); i++)
                 for (int j = 0; j < GetMapWidth(); j++)
@@ -89,6 +84,7 @@ namespace SokobanGame
 
                 }
             ComputeTextureSize();
+            return true;
         }
 
         private void ComputeTextureSize()
@@ -172,8 +168,9 @@ namespace SokobanGame
             }
             spriteBatch.DrawString(Fonts["font"], string.Format("Current scores: {0}  Scores: {1}  \nFree storage location count: {2} ", CurrentScores, Scores, StorageLocationCount), new Vector2(50, 440), Color.Black);
 
-            if (IsFinishedLevel())
-                SetNextMap(++levelNumber);
+
+
+            FinishGame = IsFinishedLevel() && !SetNextMap(++levelNumber);
 
         }
 
@@ -183,9 +180,9 @@ namespace SokobanGame
                 return;
 
 
-            //var pressedKey = currentKeyboardState.GetPressedKeys().First();
-            //if (button == "Right" || button == "Left" || button == "Up" || button == "Down")
-
+            var pressedKey = currentKeyboardState.GetPressedKeys().First().ToString();
+            if (!(pressedKey == "Right" || pressedKey == "Left" || pressedKey == "Up" || pressedKey == "Down"))
+                return;
 
 
             for (int i = 0; i < GetMapHeight(); i++)

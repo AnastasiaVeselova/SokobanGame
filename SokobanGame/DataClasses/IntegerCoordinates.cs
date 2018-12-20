@@ -20,7 +20,7 @@ namespace SokobanGame
         public IntegerCoordinates(IntegerCoordinates coordinates)
         {
             if (coordinates == null)
-                throw new ArgumentNullException("null coordinates", nameof(coordinates));
+                throw new ArgumentNullException("null coordinates");
 
             X = coordinates.X;
             Y = coordinates.Y;

@@ -50,10 +50,10 @@
     <Compile Include="DataClasses\IntegerCoordinates.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="LoadResourses\LoadMapFiles.cs" />
-    <Compile Include="LoadResourses\TextureContent.cs" />
+    <Compile Include="LoadResourses\LoadContent.cs" />
     <Compile Include="MapCreator\CreatureMapCreator.cs" />
     <Compile Include="Menu\Button.cs" />
-    <Compile Include="Menu\Finish.cs" />
+    <Compile Include="Menu\FinishGame.cs" />
     <Compile Include="Menu\GameState.cs" />
     <Compile Include="Menu\MainMenu.cs" />
     <Compile Include="SokoGame.cs" />
